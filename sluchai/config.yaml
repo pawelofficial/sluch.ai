@@ -1,0 +1,8 @@
+
+CONFIGS:
+  SAMPLERATE: 48000.0
+  CHANNELS: 2
+  DURATION: 5 
+  OVERLAP: 5
+  DEVICE_INDEX : 15
+  SYSTEM_MESSAGE: "Your job is to create notes for an exam from the user input, which is a raw transcript of a lecture. Do this in Polish."
