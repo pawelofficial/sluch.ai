@@ -11,16 +11,20 @@ from sluchai.utils import setup_logger,purge_dir,CONFIG
 API_KEY = os.getenv("OPENAI_API_KEY")
 
 # Path to your audio file
-audio_file_path = "path/to/your/file.wav"
 
 
-def stt(filename,client=None, lang='pl',input_dir=None,output_dir=None):
-    this_dir=os.path.dirname(os.path.abspath(__file__))
-    if not input_dir:
-        input_dir=os.path.join(this_dir,'slices')
-    if not output_dir:
-        output_dir=os.path.join(this_dir,'slices_transcripts')
 
+
+this_dir=os.path.dirname(os.path.abspath(__file__))
+logs_path=os.path.join(this_dir,"logs")
+LOGGER=setup_logger("windows_record",fp=os.path.join(logs_path,'stt.log') )
+
+
+
+def stt(filename,user_dirs,client=None, lang=CONFIG['LANGUAGE'] ):
+
+    input_dir=user_dirs['03_audio_slices']
+    output_dir=user_dirs['04_stt_slices']
     if not client:
         client = openai.Client()
 
@@ -42,37 +46,48 @@ def stt(filename,client=None, lang='pl',input_dir=None,output_dir=None):
         f.write(response.text)
 
 
-def stt_many(dirname='slices'):
+def stt_many(user_dirs):
     client = openai.OpenAI(api_key=API_KEY)
-    this_dir=os.path.dirname(os.path.abspath(__file__))
-    fp=os.path.join(this_dir,dirname)
-    files=os.listdir(fp)
+
+    files=os.listdir(user_dirs['03_audio_slices'])
     for file in files:
-        stt(file,client=client,input_dir=fp)
+        stt(file,client=client,user_dirs=user_dirs)
         
         
-def process_text_files(dirname='slices_transcripts',output_dirname='processed_slices'):
-    
-    this_dir=os.path.dirname(os.path.abspath(__file__))
-    output_fp=os.path.join(this_dir,output_dirname)
-    purge_dir(output_fp)
-    input_dir=os.path.join(this_dir,dirname)
+def process_text_files(user_dirs):
+            
+    input_dir=user_dirs['04_stt_slices']
+    purge_dir(user_dirs['05_notes'],inclusive=False)
+    output_dir=user_dirs['05_notes']
+    output_dir2=user_dirs['07_user_notes']
+
+
     client = openai.Client()
 
     files=[os.path.join(input_dir,i)  for i in  os.listdir(input_dir)]
     filenames=os.listdir(input_dir)
     fulltext={}
     for no,file in enumerate(files):
-        with open(file,'r',encoding='utf-8') as f:
-            text=f.read()
+        LOGGER.info(f"Processing {file}")
+        with open(file, "r",encoding="utf-8") as f:
+            text = f.read()
         ai_output=openai_completion(text,client=client)
 
         fulltext[filenames[no]]=ai_output
         
-        with open(os.path.join(output_fp,filenames[no]),'w',encoding='utf-8') as f:
+        with open(os.path.join(output_dir,filenames[no]),'w',encoding='utf-8') as f:
             f.write(ai_output)
+        
+    with open(os.path.join(output_dir2,'fulltext.json'),'w',encoding='utf-8') as f:
+        f.write('-------------------------------------------------------')
+        for key,value in fulltext.items():
+            f.write(f"{key}:\n")
+            f.write(f"{value}\n")
+            f.write("\n\n")
+            f.write('-------------------------------------------------------')
+        
 
-    json.dump(fulltext,open(os.path.join(output_fp,'fulltext.json'),'w',encoding='utf-8'),indent=4 )
+    #json.dump(fulltext,open(os.path.join(output_dir2,'fulltext.json'),'w',encoding='utf-8'),indent=4 ,ensure_ascii=False)
 
         
 
@@ -85,6 +100,7 @@ def openai_completion(prompt
                       , temperature=0.7
                       , max_tokens=None):
     print('calling openai')
+
 
 
     if not client:

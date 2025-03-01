@@ -28,7 +28,7 @@ import numpy as np
 this_dir=os.path.dirname(os.path.abspath(__file__))
 data_dir=os.path.join(this_dir,"data")
 input_data_dir=os.path.join(this_dir,"input_data")
-purge_dir(data_dir)
+
 logs_path=os.path.join(this_dir,"logs")
 LOGGER=setup_logger("windows_record",fp=os.path.join(logs_path,'windows_recorder.log') )
 
@@ -44,8 +44,10 @@ overlap=int(CONFIG['OVERLAP'])
 
 def find_device(device_name="Stereo Mix (Realtek(R) Audio)"):
     devices=sd.query_devices()
+    LOGGER.info(f"Devices: {devices}")
     for i,device in enumerate(devices):
         if device_name in device['name']:
+            LOGGER.info(f"Found {device_name} at index {i}")
             return i        
     
     print(f"Device {device_name} not found")
@@ -81,36 +83,43 @@ def record_audio(filename,device_index):
     print(f"Saved: {filename}")
 
 # Loop to continuously save 30s chunks
-def start_recording(device_index=device_index):
-    purge_dir(data_dir)
+def start_recording(device_index,user_dirs):
+    arfp=user_dirs['audio_recordings']
+    purge_dir(arfp,inclusive=False)
+    
+    
     file_counter = 1
     while True:
         now=datetime.datetime.now().strftime("%Y%m%d%H%M%S")
         filename = f"{file_counter:04d}_recording_{now}.wav"
-        fp=os.path.join(data_dir,filename)
+        fp=os.path.join(arfp,filename)
         record_audio(fp,device_index)
         file_counter += 1
 
 
-def mp3_to_wav(filename,dir=None):
-    if not dir:
-        dir=input_data_dir  
-    # Convert MP3 to WAV
-    mp3_fp = os.path.join(dir, filename)
-    wav_fp = os.path.join(dir, filename.replace('.mp3', '.wav'))
+def mp3_to_wav(filename,user_dirs):
+    input_dir=user_dirs['01_user_input']
+    output_dir=user_dirs['02_audio_input']
+
+    mp3_fp = os.path.join(input_dir, filename)
+    wav_fp = os.path.join(output_dir, filename.replace('.mp3', '.wav'))
     os.system(f"ffmpeg -i {mp3_fp} {wav_fp}")
     print(f"Converted {mp3_fp} to {wav_fp}")
     return wav_fp
 
 
-def slice_file(filename, overlap=5, core_slice=30,dir=None):
-    if not dir:
-        dir=input_data_dir
-    fp = os.path.join(dir, filename)
-    
-    purge_dir(os.path.join(this_dir, 'slices'))
-    output_dir = os.path.join(this_dir, 'slices')
+def slice_file(filename,user_dirs
+               , overlap=CONFIG['OVERLAP']
+               , core_slice=CONFIG['DURATION']
+               ):
 
+    input_dir=user_dirs['02_audio_input']
+    slices_dir=user_dirs['03_audio_slices']
+
+        
+    purge_dir(slices_dir,inclusive=False)
+
+    fp=os.path.join(input_dir,filename)
     with wave.open(fp, 'rb') as wf:
         sample_width = wf.getsampwidth()
         channels = wf.getnchannels()
@@ -136,7 +145,7 @@ def slice_file(filename, overlap=5, core_slice=30,dir=None):
 
             start_seconds=int(slice_start / framerate)
             end_seconds=int(slice_end / framerate)
-            chunk_filename = os.path.join(output_dir, f"{chunk_idx:03d}_slice_{start_seconds}_{end_seconds}.wav")
+            chunk_filename = os.path.join(slices_dir, f"{chunk_idx:03d}_slice_{start_seconds}_{end_seconds}.wav")
             with wave.open(chunk_filename, 'wb') as wf_chunk:
                 wf_chunk.setnchannels(channels)
                 wf_chunk.setsampwidth(sample_width)
