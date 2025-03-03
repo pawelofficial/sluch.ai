@@ -5,7 +5,7 @@ dotenv.load_dotenv()
 
 import openai
 import os 
-from sluchai.utils import setup_logger,purge_dir,CONFIG
+from sluchai.utils import setup_logger,purge_dir,CONFIG,create_dir
 
 # Set your OpenAI API key
 API_KEY = os.getenv("OPENAI_API_KEY")
@@ -54,7 +54,7 @@ def stt_many(user_dirs):
         stt(file,client=client,user_dirs=user_dirs)
         
         
-def process_text_files(user_dirs):
+def process_text_files(filename,user_dirs):
             
     input_dir=user_dirs['04_stt_slices']
     purge_dir(user_dirs['05_notes'],inclusive=False)
@@ -78,7 +78,8 @@ def process_text_files(user_dirs):
         with open(os.path.join(output_dir,filenames[no]),'w',encoding='utf-8') as f:
             f.write(ai_output)
         
-    with open(os.path.join(output_dir2,'fulltext.json'),'w',encoding='utf-8') as f:
+    fulltext_filename=filename.replace('.wav','.txt')
+    with open(os.path.join(output_dir2,fulltext_filename),'w',encoding='utf-8') as f:
         f.write('-------------------------------------------------------')
         for key,value in fulltext.items():
             f.write(f"{key}:\n")
@@ -86,6 +87,13 @@ def process_text_files(user_dirs):
             f.write("\n\n")
             f.write('-------------------------------------------------------')
         
+    with open(os.path.join(user_dirs['permanent_user_dir'],fulltext_filename),'w',encoding='utf-8') as f:
+        f.write('-------------------------------------------------------')
+        for key,value in fulltext.items():
+            f.write(f"{key}:\n")
+            f.write(f"{value}\n")
+            f.write("\n\n")
+            f.write('-------------------------------------------------------')
 
     #json.dump(fulltext,open(os.path.join(output_dir2,'fulltext.json'),'w',encoding='utf-8'),indent=4 ,ensure_ascii=False)
 

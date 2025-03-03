@@ -5,33 +5,37 @@ import shutil
 this_dir=os.path.dirname(os.path.abspath(__file__))
 data_dir=os.path.join(this_dir,"data")
 
+#sai.utils.make_passwords()
+sai.utils.activate_account('H4Iq')
+exit(1)
 
-# workflow 1 - expects user input in 01_user_input dir 
-ts_now=datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-##ts_now='20250301_195328'
+def workflow1():
+    # workflow 1 - expects user input in 01_user_input dir 
+    ts_now=datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+    ##ts_now='20250301_195328'
 
-# purge data 
-sai.utils.purge_dir(data_dir,inclusive=False)
+    # purge data 
+    sai.utils.purge_dir(data_dir,inclusive=False)
 
-# make user dirs 
-user_dirs=sai.utils.make_temp_data_dirs(name=ts_now) 
-##user_dirs=sai.utils.get_user_dirs(name=ts_now)
+    # make user dirs 
+    user_dirs=sai.utils.make_temp_data_dirs(name=ts_now) 
+    ##user_dirs=sai.utils.get_user_dirs(name=ts_now)
 
-# copy example file 
-shutil.copy(os.path.join(this_dir,'sluchai','input.mp3'), user_dirs['01_user_input'])
+    # copy example file 
+    shutil.copy(os.path.join(this_dir,'sluchai','input.mp3'), user_dirs['01_user_input'])
 
 
-# convert to wav 
-sai.windows_record.mp3_to_wav('input.mp3',user_dirs=user_dirs)
+    # convert to wav 
+    sai.windows_record.mp3_to_wav('input.mp3',user_dirs=user_dirs)
 
-# slice wav file
-sai.windows_record.slice_file('input.wav',user_dirs=user_dirs)
+    # slice wav file
+    sai.windows_record.slice_file('input.wav',user_dirs=user_dirs)
 
-# do stt 
-sai.stt.stt_many(user_dirs)
+    # do stt 
+    sai.stt.stt_many(user_dirs)
 
-# process text files
-sai.stt.process_text_files(user_dirs)
+    # process text files
+    sai.stt.process_text_files('input.wav', user_dirs)
 
 
 
