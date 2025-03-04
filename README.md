@@ -1,11 +1,17 @@
 # sluch.ai
-# app for speech to text + summarize ( make notes ) from audio to help students with making notes during online lectures
+# app for sluchifying - speech to text + summarize ( make notes ) from audio to help students with making notes during online lectures
 
 
-Roadmap
+Roadmap:
 - develop core functionalities:
     - status:
         - in progress: live notes 
-        - next to do: batch transcribe
+        - next to do: batch sluchify front
+    - to think about:
+        - use local LLMs instead of API 
+        - Port to Azure to have Microsoft auth
 - publish MVP
-- advertise MVP  
+    - status:
+        - in progress: nothing
+        - to do: dockerize
+- advertise MVP 
