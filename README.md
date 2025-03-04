@@ -1,5 +1,6 @@
 # sluch.ai
-# app for sluchifying - speech to text + summarize ( make notes ) from audio to help students with making notes during online lectures
+# app for sluchifying 
+speech to text + summarize ( make notes ) from audio to help students with making notes during online lectures
 
 
 Roadmap:
