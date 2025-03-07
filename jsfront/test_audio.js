@@ -4,7 +4,7 @@ import FormData from 'form-data';
 
 (async () => {
   const formData = new FormData();
-  formData.append('file', fs.createReadStream('sample.wav'));
+  formData.append('file', fs.createReadStream('test_audio.wav'));
 
   const response = await fetch('http://127.0.0.1:8000/audio', {
     method: 'POST',

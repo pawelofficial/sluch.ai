@@ -9,6 +9,7 @@ recordBtn.onclick = async () => {
         mediaRecorder.stop();
         clearInterval(interval);
         micIcon.src = 'mic-black.png';
+        micIcon.classList.remove('recording');
     } else {
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
         mediaRecorder = new MediaRecorder(stream);
@@ -34,6 +35,7 @@ recordBtn.onclick = async () => {
 
         mediaRecorder.start();
         micIcon.src = 'mic-red.png';
+        micIcon.classList.add('recording');
 
         interval = setInterval(() => {
             mediaRecorder.stop();
