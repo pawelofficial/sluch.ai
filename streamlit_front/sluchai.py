@@ -19,3 +19,9 @@ stu.bottom_placeholder()
 
 
 
+#import streamlit as st
+#
+#audio_bytes = st.audio_input("Record some audio")
+#if audio_bytes:
+#    st.audio(audio_bytes, format="audio/wav")
+    

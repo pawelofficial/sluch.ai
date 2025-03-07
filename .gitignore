@@ -4,4 +4,5 @@
 *.txt
 *.log
 *.json
+node_modules/
 *__pycache__*

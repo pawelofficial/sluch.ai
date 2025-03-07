@@ -30,7 +30,7 @@ def read_notes():
         return
 
     # Create three tabs for switching between different note sets
-    tab1, tab2, tab3 = st.tabs(["Note 1", "Note 2", "Note 3","Recap"])
+    tab1, tab2, tab3, tab4 = st.tabs(["Note 1", "Note 2", "Note 3","Recap"])
 
     with tab1:
         selected_file1 = st.selectbox("Select file in Tab 1", files, key="file1",index=None)
