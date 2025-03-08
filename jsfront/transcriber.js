@@ -7,8 +7,8 @@ let processedTexts = new Set();
 
 setInterval(() => {
     const username = usernameInput.value;
-    console.log(username);  // logs every 3 seconds
-    console.log(window.isRecording);  // logs every 3 seconds
+    //console.log(username);  // logs every 3 seconds
+    //console.log(window.isRecording);  // logs every 3 seconds
 
     
     if (!window.isRecording) return;  // stop if not recording

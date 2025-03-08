@@ -16,18 +16,36 @@
 </head>
 <body>
 
-<button id="recordBtn">
-    <img id="micIcon" src="mic-black.png" width="64">
-</button>
-
-<input type="text" id="username" placeholder="Enter username" />
-
-
-<div class="response-container">
-    <div id="STTresponseDiv"></div>
-    <div id="TRresponseDiv"></div>
+<!-- Login Form -->
+<div id="loginContainer">
+    <form id="loginForm">
+        <input type="text" id="username" placeholder="Enter username" required>
+        <input type="password" id="password" placeholder="Enter password" required>
+        <button type="submit">Login</button>
+    </form>
+    <p id="loginMessage"></p>
 </div>
 
+<div id="appContainer" style="display: none;">
+    <button id="recordBtn">
+        <img id="micIcon" src="mic-black.png" width="64">
+    </button>
+
+    <input type="text" id="username" placeholder="Enter username" />
+
+
+    <div class="response-container">
+        <div id="STTresponseDiv"></div>
+        <div id="TRresponseDiv"></div>
+    </div>
+</div>
+
+<div id="userInfo" style="display: none;">
+    Logged in as: <span id="usernameDisplay"></span>
+</div>
+
+
+<script src="login.js"></script>
 <script src="recorder.js"></script>
 <script src="transcriber.js"></script>
 

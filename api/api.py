@@ -33,6 +33,19 @@ async def transcribe(req: TranscribeRequest):
     print(response_text)
     return JSONResponse(content={"text": response_text})
 
+class User(BaseModel):
+    username: str
+    password : str 
+
+
+@app.post("/login")
+async def transcribe(req: User):
+    if req.username.lower()=='admin' and req.password.lower()=='admin':
+        return JSONResponse(content={"text": f"{req.username} ","logged_in":True })
+    else:
+        return JSONResponse(content={"text": "invalid username/password","logged_in":False })
+
+
 
 if __name__ == '__main__':
     import uvicorn
