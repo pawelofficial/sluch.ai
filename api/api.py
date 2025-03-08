@@ -1,8 +1,9 @@
 from fastapi import FastAPI, UploadFile, File
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
 import datetime 
-
+import time 
 app = FastAPI()
 
 app.add_middleware(
@@ -20,6 +21,20 @@ async def receive_audio(file: UploadFile = File(...)):
     text = f'Lorem ipsum dolor sit amet, consectetur adipiscing elit {ts_now} '
     print(text)
     return JSONResponse(content={"text": text})
+
+
+class TranscribeRequest(BaseModel):
+    text: str
+
+@app.post("/transcribe")
+async def transcribe(req: TranscribeRequest):
+    time.sleep(6)
+    print('here')
+    ts_now = datetime.datetime.now().isoformat()
+    response_text = f'received {req.text} {ts_now}'
+    print(response_text)
+    return JSONResponse(content={"text": response_text})
+
 
 if __name__ == '__main__':
     import uvicorn
