@@ -28,8 +28,6 @@ class TranscribeRequest(BaseModel):
 
 @app.post("/transcribe")
 async def transcribe(req: TranscribeRequest):
-    time.sleep(6)
-    print('here')
     ts_now = datetime.datetime.now().isoformat()
     response_text = f'received {req.text} {ts_now}'
     print(response_text)

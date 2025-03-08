@@ -10,6 +10,7 @@ recordBtn.onclick = async () => {
         mediaRecorder.stop();
         micIcon.src = 'mic-black.png';
         micIcon.classList.remove('recording');
+        window.isRecording = false; // stopped
     } else {
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
         mediaRecorder = new MediaRecorder(stream);
@@ -26,7 +27,6 @@ recordBtn.onclick = async () => {
             .then(data => {
                 const newText = document.createElement('p');
                 newText.textContent = data.text || 'No text returned';
-                newText.style.margin = '5px 0';
                 STTresponseDiv.appendChild(newText);
                 STTresponseDiv.scrollTop = STTresponseDiv.scrollHeight;
             })
@@ -34,8 +34,9 @@ recordBtn.onclick = async () => {
         };
 
         mediaRecorder.start(5000);
-
         micIcon.src = 'mic-red.png';
         micIcon.classList.add('recording');
     }
+
+    window.isRecording = mediaRecorder.state === 'recording';
 };
