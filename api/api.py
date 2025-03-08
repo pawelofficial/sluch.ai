@@ -48,7 +48,7 @@ async def transcribe(req: User):
 @app.post("/register")
 async def transcribe(req: User):
     if req.username.lower()=='admin' and req.password.lower()=='admin':
-        return JSONResponse(content={"text": f"{req.username} ","success":True })
+        return JSONResponse(content={"text": f"Registration succesfull - go back to login page and login","success":True })
     else:
         return JSONResponse(content={"text": "invalid username/password","success":False })
 
