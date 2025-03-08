@@ -1,6 +1,7 @@
 const recordBtn = document.getElementById('recordBtn');
 const micIcon = document.getElementById('micIcon');
-const responseDiv = document.getElementById('STTresponseDiv');
+const STTresponseDiv = document.getElementById('STTresponseDiv');
+const TRresponseDiv = document.getElementById('TRresponseDiv');
 
 let mediaRecorder;
 
@@ -26,8 +27,8 @@ recordBtn.onclick = async () => {
                 const newText = document.createElement('p');
                 newText.textContent = data.text || 'No text returned';
                 newText.style.margin = '5px 0';
-                responseDiv.appendChild(newText);
-                responseDiv.scrollTop = responseDiv.scrollHeight; // Auto-scroll to the latest text
+                STTresponseDiv.appendChild(newText);
+                STTresponseDiv.scrollTop = STTresponseDiv.scrollHeight; // Auto-scroll to the latest text
             })
             .catch(err => console.error(err));
         };
