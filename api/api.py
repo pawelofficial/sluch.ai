@@ -41,9 +41,17 @@ class User(BaseModel):
 @app.post("/login")
 async def transcribe(req: User):
     if req.username.lower()=='admin' and req.password.lower()=='admin':
-        return JSONResponse(content={"text": f"{req.username} ","logged_in":True })
+        return JSONResponse(content={"text": f"Welcom {req.username} !","success":True })
     else:
-        return JSONResponse(content={"text": "invalid username/password","logged_in":False })
+        return JSONResponse(content={"text": "invalid username/password","success":False })
+
+@app.post("/register")
+async def transcribe(req: User):
+    if req.username.lower()=='admin' and req.password.lower()=='admin':
+        return JSONResponse(content={"text": f"{req.username} ","success":True })
+    else:
+        return JSONResponse(content={"text": "invalid username/password","success":False })
+
 
 
 

@@ -19,9 +19,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const data = await response.json();
         loginMessage.textContent = data.text;
-        loginMessage.style.color = data.logged_in ? 'green' : 'red';
+        loginMessage.style.color = data.success ? 'green' : 'red';
 
-        if (data.logged_in) {
+        if (data.success) {
             setTimeout(() => {
                 loginContainer.style.display = 'none'; // Hide login form
                 appContainer.style.display = 'block'; // Show main app
