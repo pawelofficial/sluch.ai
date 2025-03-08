@@ -18,3 +18,42 @@ body {
 .recording {
     animation: blink 1s infinite;
 }
+
+#STTresponseDiv {
+    margin-top: 20px;
+    padding: 15px;
+    width: 40%;
+    height: 200px;
+    border: 1px solid #ccc;
+    overflow-y: auto;
+    font-family: Arial, sans-serif;
+    line-height: 1.4;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+#STTresponseDiv p {
+    margin: 5px 0;
+}
+
+#AIresponseDiv {
+    margin-top: 20px;
+    padding: 15px;
+    width: 40%;
+    height: 200px;
+    border: 1px solid #ccc;
+    overflow-y: auto;
+    font-family: Arial, sans-serif;
+    line-height: 1.4;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+#AIresponseDiv p {
+    margin: 5px 0;
+}
+
+.response-container {
+    display: flex;
+    gap: 20px; /* Adds space between divs */
+}
